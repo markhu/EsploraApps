@@ -25,11 +25,12 @@ Per Adafruit MIT license, following comments included
 */
 
 // These definitions map display functions to the Adduino Esplora display header pins
-#define sclk 15
-#define mosi 16
-#define cs   7
-#define dc   0
-#define rst  1
+//  AdaFruit breakout // SainSmart breakout
+#define sclk 15       // 15
+#define mosi 16       // 16
+#define cs    7       //  0
+#define dc    0       //  7
+#define rst   1       //  8
  
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
@@ -88,19 +89,22 @@ void setup() {
 }
 
 void loop() {
-  int S1, S2, S3;   // holds values of switches 1 to 3
+  int S1, S2, S3, S4; // holds values of button switches 1 to 3
   DisplaySplash();  // Display splash page and main menu
-  S1=HIGH; S2=HIGH; S3=HIGH;
-  while(S1==HIGH && S2==HIGH && S3==HIGH) {  // keep reading buttons until one is pressed 
+  S1=HIGH; S2=HIGH; S3=HIGH; S4=HIGH;
+  while(S1==HIGH && S2==HIGH && S3==HIGH && S3==HIGH) {  // keep reading buttons until one is pressed 
      S1 = Esplora.readButton(SWITCH_1);
      S2 = Esplora.readButton(SWITCH_2);  
      S3 = Esplora.readButton(SWITCH_3);
+     S4 = Esplora.readButton(SWITCH_4);
      if(S1==LOW) 
-       TestOutputs();  // if Switch 1 is pressed, test outputs
+       TestOutputs();  // if Switch 1 is pressed, test inputs
      else if(S2==LOW) 
-       TestLED();      // if switch 2 is [ressed, do LED mixer
+       TestLED();      // if switch 2 is pressed, do LED mixer
      else if(S3==LOW)
        TestSound();    // if switch 3 is pressed, do buzzer test
+     else if(S4==LOW) 
+       TestDisplay();
   }  // end while (breaks out if button presed and routine done (meaning go back to splash page)
 }
 
@@ -110,12 +114,14 @@ void DisplaySplash() {   // display first screen which is also the main menu
   displayString(0, 0,"Welcome to",ST7735_GREEN);
   displayString(0,16," Arduino", ST7735_GREEN); 
   displayString(0,32,"  Esplora", ST7735_GREEN);
+  // TBD: detect pins and display AdaFruit or SainSmart XXX
   tft.setTextSize(1); 
   delay(500);
   displayString(0,61,"Press a button:",ST7735_WHITE);
-  displayString(0,78,"- Switch 1 to test outputs", ST7735_WHITE);
+  displayString(0,78,"- Switch 1 to test inputs", ST7735_WHITE);
   displayString(0,91,"- Switch 2 to test LED", ST7735_WHITE);
   displayString(0,104,"- Switch 3 to test sound", ST7735_WHITE);
+  displayString(0,117,"- Button 4 tests display", ST7735_WHITE);
 }
 
 void TestLED() {  // text RGB LED on Esplora interactively
