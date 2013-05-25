@@ -37,7 +37,7 @@ Per Adafruit MIT license, following comments included
 #include <SPI.h>             // SPI communications library
 #include <Esplora.h>         // Arduino Esplora specific library
 
-// Option 1: explicitly note SPI pins - this mayes display writes noticably slower
+// Option 1: explicitly note SPI pins - this makes display writes noticably slower
 //Adafruit_ST7735 tft = Adafruit_ST7735(cs, dc, mosi, sclk, rst);
 
 // Option 2: must use the hardware SPI pins
@@ -105,7 +105,7 @@ void loop() {
        TestSound();    // if switch 3 is pressed, do buzzer test
      else if(S4==LOW) 
        TestDisplay();
-  }  // end while (breaks out if button presed and routine done (meaning go back to splash page)
+  }  // end while (breaks out if button pressed and routine done (meaning go back to splash page)
 }
 
 void DisplaySplash() {   // display first screen which is also the main menu
@@ -121,7 +121,7 @@ void DisplaySplash() {   // display first screen which is also the main menu
   displayString(0,78,"- Switch 1 to test inputs", ST7735_WHITE);
   displayString(0,91,"- Switch 2 to test LED", ST7735_WHITE);
   displayString(0,104,"- Switch 3 to test sound", ST7735_WHITE);
-  displayString(0,117,"- Button 4 tests display", ST7735_WHITE);
+  displayString(0,117,"- Button 4 to test display", ST7735_WHITE);
 }
 
 void TestLED() {  // text RGB LED on Esplora interactively
@@ -168,6 +168,7 @@ void TestLED() {  // text RGB LED on Esplora interactively
      Esplora.writeRGB(red, green, blue);  // set LED color
      delay(35);  // wait a short time
   }
+  Esplora.writeRGB(0, 0, 0);   // reSet LED
 }
 
 void TestSound() {  // text Sound "buzzer" on Esplora interactively
@@ -187,6 +188,7 @@ void TestSound() {  // text Sound "buzzer" on Esplora interactively
   displayString(0,117," when done",ST7735_YELLOW);
 
   while(Esplora.readJoystickButton()==HIGH) {  // keep displaying values until joystick clicked down  
+    // requires "new" Esplora libs 12/12/12
  
      freq=map(Esplora.readSlider(), 1024, 0, 0, 10000); // Map slider to 0-10,000 hz
  
